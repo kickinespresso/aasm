@@ -136,6 +136,19 @@ describe 'firing an event' do
       event.fire(obj, {})
       expect(event.failed_callbacks).to eq [:paid_tuition?]
     end
+
+    it "should list the guards" do
+      event = AASM::Core::Event.new(:graduate, state_machine) do
+        transitions :to => :alumni, :from => [:student, :applicant],
+          guard: :paid_tuition?
+      end
+
+      obj = double('object', :aasm => double('aasm', :current_state => :student))
+      allow(obj).to receive(:paid_tuition?).and_return(false)
+
+      event.fire(obj, {})
+      expect(event.guards).to eq [:paid_tuition?]
+    end
   end
 
 end

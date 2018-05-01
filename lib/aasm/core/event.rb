@@ -107,6 +107,14 @@ module AASM::Core
       transitions.flat_map(&:failures)
     end
 
+    def guards
+      transitions.flat_map(&:guards)
+    end
+
+    def unless
+      transitions.flat_map(&:unless)
+    end
+
   private
 
     def attach_event_guards(definitions)
